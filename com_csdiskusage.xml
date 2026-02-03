@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="5.0" method="upgrade">
+    <name>COM_CSDISKUSAGE</name>
+    <author>Cybersalt</author>
+    <creationDate>2026-02</creationDate>
+    <copyright>Copyright (C) 2026 Cybersalt Consulting Ltd. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later</license>
+    <authorEmail>support@cybersalt.com</authorEmail>
+    <authorUrl>https://cybersalt.com</authorUrl>
+    <version>1.0.0</version>
+    <description>COM_CSDISKUSAGE_XML_DESCRIPTION</description>
+
+    <namespace path="src">Cybersalt\Component\CsDiskUsage</namespace>
+
+    <scriptfile>script.php</scriptfile>
+
+    <administration>
+        <menu>COM_CSDISKUSAGE</menu>
+
+        <files folder="admin">
+            <folder>services</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+        </files>
+
+        <languages folder="admin/language">
+            <language tag="en-GB">en-GB/com_csdiskusage.ini</language>
+            <language tag="en-GB">en-GB/com_csdiskusage.sys.ini</language>
+        </languages>
+
+        <media destination="com_csdiskusage" folder="admin/media">
+            <folder>css</folder>
+            <folder>js</folder>
+        </media>
+    </administration>
+</extension>
