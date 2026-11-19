@@ -59,6 +59,12 @@ class DiskusageModel extends BaseDatabaseModel
                 continue;
             }
 
+            // Never follow symbolic links: they can point outside the site root
+            // and would be counted (or looped over) as if they lived inside it.
+            if ($item->isLink()) {
+                continue;
+            }
+
             $itemPath = $item->getPathname();
 
             if ($item->isFile()) {
@@ -119,7 +125,7 @@ class DiskusageModel extends BaseDatabaseModel
 
             foreach ($iterator as $file) {
                 try {
-                    if ($file->isFile()) {
+                    if ($file->isFile() && !$file->isLink()) {
                         $size += $file->getSize();
                     }
                 } catch (\Exception $e) {
@@ -131,6 +137,64 @@ class DiskusageModel extends BaseDatabaseModel
         }
 
         return $size;
+    }
+
+    /**
+     * Decode and validate a requested folder (base64 encoded in the URL).
+     *
+     * The folder is resolved with realpath() (so "..", symbolic links and
+     * relative segments are collapsed first) and must then be the Joomla root
+     * itself or a folder below it. Sibling folders that merely share the
+     * root's name as a prefix (for example "/home/x/public_html_backup" for a
+     * root of "/home/x/public_html") are refused.
+     *
+     * @param   string  $encoded  The base64 encoded path from the request
+     *
+     * @return  string|null  The resolved absolute folder, or null when it is not allowed
+     *
+     * @since   1.0.1
+     */
+    public function resolveRequestedPath(string $encoded): ?string
+    {
+        // A literal "+" in a query string arrives as a space
+        $decoded = base64_decode(str_replace(' ', '+', $encoded), true);
+
+        if ($decoded === false || $decoded === '' || strpos($decoded, "\0") !== false) {
+            return null;
+        }
+
+        $realPath = realpath($decoded);
+        $realRoot = realpath($this->getJoomlaRoot());
+
+        if ($realPath === false || $realRoot === false || !is_dir($realPath)) {
+            return null;
+        }
+
+        return self::isWithinRoot($realPath, $realRoot) ? $realPath : null;
+    }
+
+    /**
+     * Separator-aware containment check: true when $path equals $root or lies below it.
+     *
+     * @param   string  $path  Resolved absolute path to test
+     * @param   string  $root  Resolved absolute root path
+     *
+     * @return  boolean
+     *
+     * @since   1.0.1
+     */
+    public static function isWithinRoot(string $path, string $root): bool
+    {
+        $path = rtrim($path, '/\\');
+        $root = rtrim($root, '/\\');
+
+        // Windows file systems are case-insensitive
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $path = strtolower($path);
+            $root = strtolower($root);
+        }
+
+        return $path === $root || strpos($path, $root . DIRECTORY_SEPARATOR) === 0;
     }
 
     /**

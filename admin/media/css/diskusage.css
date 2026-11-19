@@ -97,6 +97,7 @@
     height: 20px;
     border-radius: 0.25rem;
     overflow: hidden;
+    background-color: var(--bs-secondary-bg, rgba(128, 128, 128, 0.15));
 }
 
 .usage-bar {
@@ -118,6 +119,26 @@
     padding-left: 0.5rem;
     font-size: 0.75rem;
     font-weight: 600;
+}
+
+/* Name filter + sortable column headers */
+.cs-diskusage-filter {
+    min-width: 12rem;
+}
+
+.csdu-sort {
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.csdu-sort:hover {
+    text-decoration: underline;
+}
+
+.csdu-sort-icon {
+    display: inline-block;
+    min-width: 1em;
+    font-size: 0.7em;
 }
 
 /* Quick access */

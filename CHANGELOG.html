@@ -1,0 +1,47 @@
+<div class="changelog-container">
+    <h1>Changelog - CS Disk Usage</h1>
+
+    <div class="version">
+        <h2>Unreleased</h2>
+
+        <h3>🔧 Improvements</h3>
+        <ul>
+            <li><strong>Folder filter and sorting</strong>: The subfolder table has a name filter box and sortable Folder, Usage/Size and Items columns.</li>
+            <li><strong>Lock-out modal</strong>: A non-dismissable modal names the operation ("Measuring folder sizes in ...") while the next folder is being measured.</li>
+            <li><strong>Dark mode</strong>: Usage bars use Bootstrap contextual colours instead of fixed hex values, so they follow the admin theme.</li>
+            <li><strong>Page title</strong>: The admin page title is now the language constant "Cybersalt Disk Usage Dashboard".</li>
+            <li><strong>Support details</strong>: New Support options (email, URL, label) and a support helper whose "please contact ..." sentence is used in the component's error messages.</li>
+        </ul>
+
+        <h3>🐛 Fixes</h3>
+        <ul>
+            <li><strong>Options button</strong>: The Options toolbar button now opens a real screen (Support and Permissions tabs); <code>config.xml</code> and <code>access.xml</code> were missing.</li>
+            <li><strong>Folder links</strong>: Links are URL-encoded so paths always survive the round trip.</li>
+        </ul>
+
+        <h3>🔍 Security</h3>
+        <ul>
+            <li><strong>Folder access check</strong>: The folder-containment check is now separator-aware (the site root itself or a real sub-folder only) and paths are resolved before the check.</li>
+            <li><strong>Symbolic links</strong>: Symbolic links are no longer followed when measuring folders.</li>
+            <li><strong>Access control</strong>: The component declares its permissions (manage, options, admin) and the screen re-checks the manage permission.</li>
+        </ul>
+    </div>
+
+    <div class="version">
+        <h2>🚀 Version 1.0.0 <span class="version-badge">February 3, 2026</span></h2>
+
+        <p>Initial release.</p>
+
+        <h3>📦 New Features</h3>
+        <ul>
+            <li><strong>Disk usage browser</strong>: Navigate the Joomla folder tree from the administrator with breadcrumb navigation, sizes, file and folder counts per folder.</li>
+            <li><strong>Usage bars</strong>: Visual bars show each subfolder's share of the current folder.</li>
+            <li><strong>Quick Access</strong>: One-click links to common Joomla folders (administrator, cache, components, images, media, modules, plugins, templates, tmp).</li>
+        </ul>
+
+        <h3>📝 Documentation</h3>
+        <ul>
+            <li>Licence updated to GNU General Public License version 3 or later.</li>
+        </ul>
+    </div>
+</div>

@@ -18,6 +18,8 @@
         <menu>COM_CSDISKUSAGE</menu>
 
         <files folder="admin">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
             <folder>services</folder>
             <folder>src</folder>
             <folder>tmpl</folder>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <fieldset name="support"
+        label="COM_CSDISKUSAGE_CONFIG_SUPPORT"
+        description="COM_CSDISKUSAGE_CONFIG_SUPPORT_DESC">
+
+        <field
+            name="support_email"
+            type="email"
+            label="COM_CSDISKUSAGE_CONFIG_SUPPORT_EMAIL"
+            description="COM_CSDISKUSAGE_CONFIG_SUPPORT_EMAIL_DESC"
+            default="support@cybersalt.com"
+            size="40"
+        />
+
+        <field
+            name="support_url"
+            type="url"
+            label="COM_CSDISKUSAGE_CONFIG_SUPPORT_URL"
+            description="COM_CSDISKUSAGE_CONFIG_SUPPORT_URL_DESC"
+            default="https://www.cybersalt.com/services/support-request-form"
+            size="60"
+        />
+
+        <field
+            name="support_label"
+            type="text"
+            label="COM_CSDISKUSAGE_CONFIG_SUPPORT_LABEL"
+            description="COM_CSDISKUSAGE_CONFIG_SUPPORT_LABEL_DESC"
+            default="Cybersalt support"
+            size="40"
+        />
+    </fieldset>
+
+    <fieldset name="permissions"
+        label="JCONFIG_PERMISSIONS_LABEL"
+        description="JCONFIG_PERMISSIONS_DESC">
+
+        <field
+            name="rules"
+            type="rules"
+            label="JCONFIG_PERMISSIONS_LABEL"
+            validate="rules"
+            filter="rules"
+            component="com_csdiskusage"
+            section="component"
+        />
+    </fieldset>
+</config>

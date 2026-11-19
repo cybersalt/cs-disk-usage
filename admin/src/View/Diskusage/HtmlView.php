@@ -15,6 +15,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView as BaseHtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Cybersalt\Component\CsDiskUsage\Administrator\Helper\SupportHelper;
 
 /**
  * HTML View class for the Disk Usage component
@@ -70,31 +71,44 @@ class HtmlView extends BaseHtmlView
         $model = $this->getModel();
         $app = Factory::getApplication();
 
+        // Defence in depth: the dispatcher already enforces core.manage, but this
+        // screen lists the server's folder structure, so check it here as well.
+        if (!$app->getIdentity()->authorise('core.manage', 'com_csdiskusage')) {
+            throw new \Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+        }
+
         // Get the requested path from input
         $input = $app->getInput();
         $requestedPath = $input->getString('path', '');
 
         // Get root and common directories
-        $this->rootPath = $model->getJoomlaRoot();
+        $this->rootPath = realpath($model->getJoomlaRoot()) ?: $model->getJoomlaRoot();
         $this->commonDirectories = $model->getCommonDirectories();
 
         // Determine the path to scan
-        if (empty($requestedPath)) {
-            $this->currentPath = $this->rootPath;
-        } else {
-            // Decode and sanitize the path
-            $requestedPath = base64_decode($requestedPath);
+        $this->currentPath = $this->rootPath;
 
-            // Security: Ensure the path is within Joomla root
-            $realPath = realpath($requestedPath);
-            $realRoot = realpath($this->rootPath);
+        if ($requestedPath !== '') {
+            // Security: decode, resolve (realpath) and make sure the folder is the
+            // Joomla root or a real sub-folder of it (separator-aware check).
+            $resolved = $model->resolveRequestedPath($requestedPath);
 
-            if ($realPath !== false && strpos($realPath, $realRoot) === 0) {
-                $this->currentPath = $realPath;
+            if ($resolved !== null) {
+                $this->currentPath = $resolved;
             } else {
-                $this->currentPath = $this->rootPath;
-                $app->enqueueMessage(Text::_('COM_CSDISKUSAGE_ERROR_INVALID_PATH'), 'warning');
+                $app->enqueueMessage(
+                    Text::_('COM_CSDISKUSAGE_ERROR_INVALID_PATH') . ' ' . SupportHelper::getContactSentence(),
+                    'warning'
+                );
             }
+        }
+
+        if (!is_readable($this->currentPath)) {
+            $app->enqueueMessage(
+                Text::sprintf('COM_CSDISKUSAGE_ERROR_UNREADABLE', htmlspecialchars(basename($this->currentPath), ENT_QUOTES, 'UTF-8'))
+                . ' ' . SupportHelper::getContactSentence(),
+                'error'
+            );
         }
 
         // Get disk usage data (limit depth to 1 for initial view)
@@ -116,7 +130,7 @@ class HtmlView extends BaseHtmlView
      */
     protected function addToolbar(): void
     {
-        ToolbarHelper::title(Text::_('COM_CSDISKUSAGE'), 'folder');
+        ToolbarHelper::title(Text::_('COM_CSDISKUSAGE_TITLE_DASHBOARD'), 'folder');
         ToolbarHelper::preferences('com_csdiskusage');
     }
 }
