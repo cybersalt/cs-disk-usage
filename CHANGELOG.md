@@ -12,6 +12,7 @@
 ### 🐛 Fixes
 - **Options button**: The Options toolbar button now opens a real screen (Support and Permissions tabs); `config.xml` and `access.xml` were missing.
 - **Folder links**: Links are URL-encoded so paths always survive the round trip.
+- **Styles and scripts now install**: the manifest listed the CSS/JS folders in the wrong place, so Joomla never copied them and the page showed no usage bars. Moved the media block to the top level of the manifest.
 
 ### 🔍 Security
 - **Folder access check**: The folder-containment check is now separator-aware (the site root itself or a real sub-folder only) and paths are resolved before the check.

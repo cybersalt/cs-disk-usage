@@ -29,10 +29,10 @@
             <language tag="en-GB">en-GB/com_csdiskusage.ini</language>
             <language tag="en-GB">en-GB/com_csdiskusage.sys.ini</language>
         </languages>
-
-        <media destination="com_csdiskusage" folder="admin/media">
-            <folder>css</folder>
-            <folder>js</folder>
-        </media>
     </administration>
+
+    <media destination="com_csdiskusage" folder="admin/media">
+        <folder>css</folder>
+        <folder>js</folder>
+    </media>
 </extension>
